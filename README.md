@@ -57,7 +57,7 @@ West         183
 
 ## Perform a Computation
 
-The DataFrame and DataFrameColumn classes expose a number of useful APIs. `Add-ToDF` PowerShellizes the `Add` method.
+The DataFrame and DataFrameColumn classes expose a number of useful APIs. `Add-ToDF` *PowerShellizes* the `Add` method.
 
 ```ps
 . .\cvtToDF.ps1
