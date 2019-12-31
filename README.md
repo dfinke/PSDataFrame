@@ -4,7 +4,7 @@
 
 Microsoft announced the preview of a DataFrame type for .NET to make data exploration easy. https://devblogs.microsoft.com/dotnet/an-introduction-to-dataframe/
 
-The functions n `cvtToDF` is a proof of concept that wraps it in PowerShell so you can easily transform Powershell arrays into a DataFrame and then work with it.
+The functions in `cvtToDF` is a proof of concept that wraps it in PowerShell so you can easily transform Powershell arrays into a DataFrame and then work with it.
 
 ## Test data
 
@@ -54,4 +54,32 @@ North        174
 South         61
 West         183
 ```
+
+## Perform a Computation
+
+The DataFrame and DataFrameColumn classes expose a number of useful APIs. `Add-ToDF` PowerShellizes the `Add` method.
+
+```ps
+. .\cvtToDF.ps1
+
+$df = ConvertTo-DataFrame (Import-Excel .\testData.csv)
+Add-ToDF -targetDF $df -ColumnName TotalSold -Value 100
+```
+
+It adds 100 to all the values in the `ColumnName` and returns them. If you use the `-InPlace` switch, it also updates the values in the DataFrame.
+
+```
+129
+119
+157
+101
+188
+142
+186
+107
+183
+189
+```
+
 <!-- chapter end -->
+
