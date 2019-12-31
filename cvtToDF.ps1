@@ -1,4 +1,4 @@
-$basePath = ".\bin"
+$basePath = "$pwd\bin"
 
 $null = [System.Reflection.Assembly]::LoadFrom("$basePath\Apache.Arrow.dll")
 $null = [System.Reflection.Assembly]::LoadFrom("$basePath\Microsoft.ML.DataView.dll")
