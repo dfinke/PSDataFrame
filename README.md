@@ -80,6 +80,9 @@ It adds 100 to all the values in the `ColumnName` and returns them. If you use t
 183
 189
 ```
+## Summary
+
+The Microsoft DataFrame is a preview, and `ConvertTo-DataFrame` a proof of concept. It's an excellent playground to make data exploration easy.
 
 <!-- chapter end -->
 
