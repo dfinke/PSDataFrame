@@ -1,12 +1,16 @@
 <!-- chapter start -->
 
-# PSDataFrame
+[An Introduction to DataFrame](https://devblogs.microsoft.com/dotnet/an-introduction-to-dataframe/)
 
-Microsoft announced the preview of a DataFrame type for .NET to make data exploration easy. https://devblogs.microsoft.com/dotnet/an-introduction-to-dataframe/
+> Microsoft is announcing the preview of a DataFrame type for .NET to make data exploration easy
 
-The functions in `cvtToDF` is a proof of concept that wraps it in PowerShell so you can easily transform Powershell arrays into a DataFrame and then work with it.
+The functions in the PowerShell `cvtToDF` is a proof of concept allowing you to easily transform Powershell arrays into a DataFrame and then explore.
+
+There are a couple of other functions `Out-DataFrame` which formats it to more PowerShell readable output and `Add-ToDF` that lets you manipulate data in a column.
 
 ## Test data
+
+Here is the sample data, save in both a `csv` and `Excel` file for testing.
 
 |Region|Item|TotalSold|DateSold|Factor|
 |---|---|---|---|---|
@@ -23,10 +27,12 @@ West|drill|89|12/28|2.1
 
 ## PowerShell CSV and DataFrames
 
-```ps
+Here, you dot source the PowerShell script and you can create a `DataFrame` from `CSV` data using the built-in `Import-Csv` PowerShell function  `ConvertTo-DataFrame (Import-Csv .\testData.csv)`.
+
+```powershell
 . .\cvtToDF.ps1
 
-(ConvertTo-DataFrame (Import-Csv .\testData.csv)).groupby("Region").Sum("TotalSold").Sort("Region") | Out-DataFrame
+(ConvertTo-DataFrame (Import-Csv .\testData.csv)).GroupBy("Region").Sum("TotalSold").Sort("Region") | Out-DataFrame
 ```
 
 ```
@@ -37,13 +43,21 @@ North        174
 South         61
 West         183
 ```
+
+`ConvertTo-DataFrame` returns a DataFrame so you can then do things like `GroupBy`, `Sum`, and `Sort` to get these results.
 
 ## PowerShell Excel and DataFrames
 
-```ps
+Since we're using PowerShell, we can pass any PowerShell array containing objects to `ConvertTo-DataFrame`.
+
+Here, we're using `Import-Excel` to read a spreadsheet to create the DataFrame.
+
+***Note***: You can get the PowerShell Excel module from the PowerShell Gallery `Install-Module ImportExcel`.
+
+```powershell
 . .\cvtToDF.ps1
 
-(ConvertTo-DataFrame (Import-Excel .\testData.xlsx)).groupby("Region").Sum("TotalSold").Sort("Region") | Out-DataFrame
+(ConvertTo-DataFrame (Import-Excel .\testData.xlsx)).GroupBy("Region").Sum("TotalSold").Sort("Region") | Out-DataFrame
 ```
 
 ```
@@ -54,16 +68,26 @@ North        174
 South         61
 West         183
 ```
+
+As before, `ConvertTo-DataFrame` returns a DataFrame so you can then use the `GroupBy`, `Sum`, and `Sort` methods to get these results.
 
 ## Perform a Computation
 
 The DataFrame and DataFrameColumn classes expose a number of useful APIs. `Add-ToDF` *PowerShellizes* the `Add` method.
 
-```ps
+```powershell
 . .\cvtToDF.ps1
 
 $df = ConvertTo-DataFrame (Import-Excel .\testData.csv)
 Add-ToDF -targetDF $df -ColumnName TotalSold -Value 100
+
+# C# syntax
+# $df[TotalSold].Add(100, $false)
+
+# Add-ToDF -targetDF $df -ColumnName TotalSold -Value 100 -Inplace
+
+# C# syntax
+# $df[TotalSold].Add(100, $true)
 ```
 
 It adds 100 to all the values in the `ColumnName` and returns them. If you use the `-InPlace` switch, it also updates the values in the DataFrame.
@@ -80,9 +104,12 @@ It adds 100 to all the values in the `ColumnName` and returns them. If you use t
 183
 189
 ```
+
 ## Summary
 
 The Microsoft DataFrame is a preview, and `ConvertTo-DataFrame` a proof of concept. It's an excellent playground to make data exploration easy.
+
+Definitely give it a try.
 
 <!-- chapter end -->
 
